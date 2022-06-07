@@ -36,6 +36,28 @@
                 </div>
               </form>
 
+              <div class="response" style="color:white;">
+
+                <div v-if="isLoading">
+                  <base-spinner />
+                </div>
+
+                <div class="error" v-else-if="error">
+                  {{ this.error }}
+                </div>
+
+                <div v-else>
+                  <div v-if="messageUp">
+                    your account created successfully ! enjoy
+                  </div>
+                  <div v-if="messageIn" >
+                      dear user welcome back to your diamond account !
+                  </div>
+                </div>
+
+              </div>
+
+
             </div>
           </div>
 
@@ -45,9 +67,13 @@
               <p class="text-justify">
                 If you have not registered, click on <span style="color:var(--primary);">" Sign-up "</span> button.
                 <br>
-                By checking <span style="color:var(--primary);">" Subscribe on News.mag "</span>option, the latest news will be emailed to you.Ofcourse it`s optional.
+                By checking <span style="color:var(--primary);">" Subscribe on News.mag "</span>option, the latest news will be emailed to you, if you want.
                 <br>
-                After registration, trading pages and calculation of bubbles or past prices will be activated for you.
+                <br>
+                <span style="color:var(--primary);">
+                You sign in, then trading page,calculating page and contact page will be activated for you.
+                </span>
+                <br>
                 <br>
                 Have a good time (; 
               </p>
@@ -62,26 +88,61 @@
 </template>
 
 <script>
+
 export default {
   data(){
     return{
       emailP:'',
-      passwordP:''
+      passwordP:'',
+      userId:null,
+      mode:'',
+      error:'',
+      isLoading:false
     }
   },
   methods:{
-    signUp(){
+    async signUp(){
+      this.error = '';
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch('signup',{
+          email:this.emailP,
+          password:this.passwordP
+        });
+      } catch (error) {
+        this.error = error.message || 'Something went wrong!';
+      }
+      this.userId = this.$store.getters['userId'];
+      console.log('sss',this.userId)
+      this.isLoading = false;
+      this.mode = 'signUp';
         // console.log('sss');
-        this.$store.dispatch('signup',{
-          email:this.emailP,
-          password:this.passwordP
-        })
+        
     },
-    signIn(){
-        this.$store.dispatch('login',{
+    async signIn(){
+      this.error = '';
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch('login',{
           email:this.emailP,
           password:this.passwordP
-        })
+        });
+      } catch (error) {
+        this.error = error.message || 'Something went wrong!';
+      }
+      this.userId = this.$store.getters['userId'];
+      this.isLoading = false;
+      this.mode = 'signIn'
+      
+
+    }
+  },
+  computed:{
+    messageIn(){
+      return (!this.isLoading  && this.mode === 'signIn' && this.userId)
+    },
+    messageUp(){
+      return (!this.isLoading  && this.mode === 'signUp' && this.userId)
     }
   }
 }
@@ -91,10 +152,11 @@ export default {
 <style lang='scss' scoped>
 .signinup{
   color: var(--light);
+  min-height: 80vh;
   main{
 
     .signin-form{
-      width: 60%;
+      width: 100%;
 
       .form-check-input{
         border: 2px solid var(--light);
@@ -113,5 +175,11 @@ export default {
       }
     }
   }
+
+  @media (min-width:768px){
+        .signin-form{
+          width: 60%;
+        }
+    }
 }
 </style>

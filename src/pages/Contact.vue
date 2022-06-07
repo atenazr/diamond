@@ -30,6 +30,16 @@
 
               </form>
 
+              <div >
+                <div v-if="isLoading">
+                  <base-spinner />
+                </div>
+
+                <div v-else>
+                  {{ ressponse }}
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -94,20 +104,32 @@
 </template>
 
 <script>
+import BaseSpinner from '../components/UI/BaseSpinner.vue';
 export default {
+  components: { BaseSpinner },
     data(){
       return{
         emailP:'',
-        message:""
+        message:"",
+        isLoading:false,
+        ressponse:''
       }
     },
     methods:{
-      sendMessage(){
-        console.log('sss',this.emailP,this.message);
-        this.$store.dispatch('sendMessage',{
+      async sendMessage(){
+      this.ressponse = '';
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch('sendMessage',{
           email:this.emailP,
           message : this.message
-        })
+        });
+      } catch (error) {
+        this.error = error.message || 'Something went wrong!';
+      }
+      this.ressponse = 'your message recieved ! thank you'
+      this.isLoading = false;
+        
       }
     }
 }
@@ -116,10 +138,11 @@ export default {
 <style lang='scss' scoped>
 .contact{
   color: var(--light);
+  min-height: 80vh;
   main{
 
     .form{
-      width: 60%;
+      width: 100%;
 
       input,textarea{
         background: transparent;
@@ -169,7 +192,15 @@ export default {
       }
 
     }
+
+
   }
+
+  @media (min-width:768px){
+        .form{
+          width: 60%;
+        }
+    }
 }
 
 </style>

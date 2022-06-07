@@ -4,8 +4,10 @@
         <input 
         :value="valprop"
         @input="$emit('update:valprop', $event.target.value)"
-        :type="typee" class="form-control p-3" :placeholder="place">
+        :placeholder="place"
+        :type="typee" class="form-control p-3">
     </div>
+
 
 </template>
 

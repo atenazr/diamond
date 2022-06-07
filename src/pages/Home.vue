@@ -4,52 +4,67 @@
 
     <main class="row">
 
-        <div class="col-12 col-md-8 table-responsive-md ">
+        <div class="col-12 col-md-8">
 
-          <table class="table caption-top table-bordered  table-striped table-hover">
+          <div v-if="isLoading" class="mt-5 pt-5">
+              <base-spinner /> 
+          </div>
 
-            <caption>
-              <div class="text-right my-1">
-                last upadated
-                <span>
-                 5 minutes ago
-                </span>
-              </div>
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Value</th>
-                <th scope="col">Change</th>
-                <th scope="col">%Chg</th>
-                <th scope="col">Prev</th>
-              </tr>
-            </thead>
-            <tbody>
+          <div v-else class="table-responsive-md">  
+            <table class="table caption-top table-bordered  table-striped table-hover">
 
-              <tr 
-                v-for="item in prices"
-                :key="item.id">
-                <th scope="row">
-                  {{ item.name }}
-                </th>
-                <td>
-                  {{ item.value }}
-                </td>
-                <td>
-                  {{ item.Change }}
-                </td>
-                <td>
-                  {{ item.ChgPercent }}
-                </td>
-                <td>
-                  {{ item.Prev }}
-                </td>
-              </tr>
-            
-            </tbody>
+              <caption>
+                <div class="px-2 py-1 d-flex justify-content-start align-items-center w-100 ">
+                  <span class="update">
+                    last upadate <span> 2 </span> minutes ago
+                  </span>
+                  <span class="refresh" @click="refreshPrices">
 
-          </table>
+                      <span>
+                      Refresh
+                      </span>
+                      <span class="material-symbols-outlined">
+                        sync
+                      </span>
+
+                  </span>
+                </div>
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Value</th>
+                  <th scope="col">Change</th>
+                  <th scope="col">%Chg</th>
+                  <th scope="col">Prev</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr 
+                  v-for="item in prices"
+                  :key="item.id">
+                  <th scope="row">
+                    {{ item.name }}
+                  </th>
+                  <td>
+                    {{ item.value }}
+                  </td>
+                  <td class="positive-chg" :class="{'negative-chg' : Number(item.Change) < 0}">
+                    {{ item.Change }}
+                  </td>
+                  <td>
+                    {{ item.ChgPercent }}
+                  </td>
+                  <td>
+                    {{ item.Prev }}
+                  </td>
+                </tr>
+              
+              </tbody>
+
+            </table>
+          </div>
 
         </div>
 
@@ -109,14 +124,49 @@ export default {
           preview:"Air travelers face cancellations over Memorial Day weekend",
           link:'https://www.foxbusiness.com/lifestyle/air-travelers-cancellations-memorial-day-weekend'
         }
-      ]
+      ],
+      isLoading:false
     }
   },
-  created(){
-    
-    this.prices = this.$store.getters['prices/prices'];
-    // console.log('prices',this.prices);
+  methods:{
+    async loadPrices(){
+        this.isLoading = true;
+      try {
+        await this.$store.dispatch('prices/setPrices');
+      } catch (error) {
+        this.error = error.message || 'Something went wrong!';
+      }
+      this.prices = await this.$store.getters['prices/prices'];
+      console.log('prices',this.prices);
+      this.isLoading = false;
+    },
+    async refreshPrices(){
+      await this.loadPrices();
+    }
+  },
+  computed:{
+    colorChg(){
+      const tmp = Number(Event.target.value);
+      console.log('vvv',tmp)
+      if(Number(tmp)>0){
+        return 'positve-color'
+      }else{
+        return 'negative-color'
+      }
+    }
+  },
+  created() {
+    this.loadPrices();
   }
+  // ,
+  // created(){
+  //   this.interval = setInterval(() =>{
+  //     this.loadPrices()},300000)
+  // },
+  // destroyed(){
+  //   clearInterval(this.interval)
+  // }
+
 }
 </script>
 
@@ -129,6 +179,21 @@ export default {
     .table{
       color: var(--light) !important;
       cursor: pointer;
+
+      caption{
+        .refresh{
+          color: var(--primary-alt);
+          margin-left: auto;
+          transition: .3s ease-out;
+          &:hover{
+            color: var(--primary);
+          }
+          .material-symbols-outlined{
+              line-height:inherit;
+              font-size: 15px;
+          }
+        }
+      }
 
 
       tbody{
@@ -146,6 +211,15 @@ export default {
             color:var(--gray-alt);
               }
             }
+
+          
+              .positive-chg{
+                color: green;
+              }
+              .negative-chg{
+                color: red;
+              }
+         
           
           }
       }

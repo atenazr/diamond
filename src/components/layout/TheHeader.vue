@@ -1,5 +1,5 @@
 <template>
-    <header class="d-flex justify-content-between align-items-center">
+    <header class="d-flex flex-column justify-content-center align-items-center">
       <div>
         <h1 class="">
           Diamond
@@ -42,5 +42,11 @@ header{
   padding: 1rem 6.75rem;
   margin-top: 1rem;
 
-  }
+}
+@media (min-width:768px){
+        header{
+          flex-direction: row !important;
+          justify-content: space-between !important;
+        }
+    }
 </style>

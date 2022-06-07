@@ -1,5 +1,5 @@
 import  {calculateDay} from '../../../other.js';
-const api_key = '11sizfgg3iej4q32byhkg6ocv89bpuzdmgylv5gy0rqpgo1sj721t4pfpkms';
+// const api_key = "p81117g5en9h4cez9g5g9lnz1pzpj21b751ngng53zh5q2wosfo44gbh5jn9";
 const base_url = "https://metals-api.com/api/";
 
 export default {
@@ -61,18 +61,19 @@ export default {
     await context.dispatch('loadPrevs');
     await context.commit('setChanges');
 
-    console.log(context.getters.prices);
+    console.log('prices',context.getters.prices);
   },
   async loadResponse(context,payload){
     const symbol = payload.symbol;
     const date = payload.date;
+    console.log('date',date);
     const response = await fetch(
       `${base_url}open-high-low-close/${date}?access_key=${api_key}&base=${symbol}&symbols=USD`
     );
 
     const responseData = await response.json();
 
-    // console.log('response',responseData);
+    console.log('response',responseData);
     
     if (!response.ok) {
       const error = new Error(responseData.message || 'Failed to fetch!');

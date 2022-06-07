@@ -118,17 +118,25 @@ export default {
   },
   methods:{
     async loadResponse(){
-      console.log('sss',this.date,this.symbol);
+      // console.log('sss',this.date,this.symbol);
       this.isLoading = true;
       try {
         await this.$store.dispatch('prices/loadResponse',{
-          symbol :null,
-          date :null
+          symbol :this.symbol,
+          date :this.date
         });
       } catch (error) {
         this.error = error.message || 'Something went wrong!';
       }
       this.isLoading = false;
+      await this.loadRates();
+    },
+    loadRates(){
+      let rates = this.$store.getters['prices/rates']
+      this.closePrice = rates['close'];
+      this.highPrice = rates['high'];
+      this.lowPrice = rates['low'];
+      this.openPrice = rates['open'];
     }
   },
   created(){
@@ -142,9 +150,10 @@ export default {
 
 .calculating{
     color: var(--light);
-
+    min-height: 100vh;
     .form{
-      width: 60%;
+      width: 100%;
+
   
     select{
         color: var(--light);
@@ -181,6 +190,12 @@ export default {
       p{
         font-size: 1.1rem;
         line-height: 2rem;
+        }
+    }
+
+    @media (min-width:768px){
+        .form{
+          width: 60%;
         }
     }
 }

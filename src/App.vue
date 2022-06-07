@@ -12,6 +12,8 @@
           <component :is="slotProps.Component"></component>
         </transition>
       </router-view>
+
+      <the-footer/>
     
     </div>
 
@@ -21,10 +23,12 @@
 <script>
 import Sidebar from './components/layout/Sidebar.vue'
 import TheHeader from './components/layout/TheHeader.vue'
+import TheFooter from './components/layout/TheFooter.vue'
 export default{
   components:{
     Sidebar,
-    TheHeader
+    TheHeader,
+    TheFooter
   }
 }
 </script>
@@ -62,6 +66,7 @@ button{
 #app{
   display: flex;
   width: 100%;
+  
 
   main{
     flex: 1 1 0;

@@ -33,11 +33,11 @@ export default {
     });
 
     const responseData = await response.json();
-    console.log('aaaa');
+    // console.log('aaaa',response.message);
 
     if (!response.ok) {
       const error = new Error(
-        responseData.message || 'Failed to authenticate. Check your login data.'
+        response.message || 'Failed to authenticate. Check your login data.'
       );
       throw error;
     }
