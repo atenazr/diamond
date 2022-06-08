@@ -142,7 +142,7 @@ export default {
   main{
 
     .form{
-      width: 100%;
+      
 
       input,textarea{
         background: transparent;

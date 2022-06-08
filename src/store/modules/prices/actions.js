@@ -1,5 +1,6 @@
 import  {calculateDay} from '../../../other.js';
-// const api_key = "p81117g5en9h4cez9g5g9lnz1pzpj21b751ngng53zh5q2wosfo44gbh5jn9";
+// set the api_key of metal-api.com ,you can create a free account.
+const api_key = "";
 const base_url = "https://metals-api.com/api/";
 
 export default {

@@ -1,4 +1,6 @@
 let timer;
+// set your web_key of firebase console
+const web_key = '';
 
 export default {
   async login(context, payload) {
@@ -16,11 +18,11 @@ export default {
   async auth(context, payload) {
     const mode = payload.mode;
     let url =
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBFADbbHNMTTD7YiZo4MEaNzezDk6ILKVQ';
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${web_key}`;
 
     if (mode === 'signup') {
       url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBFADbbHNMTTD7YiZo4MEaNzezDk6ILKVQ';
+        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${web_key}`;
     }
 
     const response = await fetch(url, {

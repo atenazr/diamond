@@ -1,12 +1,11 @@
 <template>
 
-  <div class="base-input my-3" :class="classs">
         <input 
+        class="base-input my-3 form-control p-3" :class="classs"
         :value="valprop"
         @input="$emit('update:valprop', $event.target.value)"
         :placeholder="place"
-        :type="typee" class="form-control p-3">
-    </div>
+        :type="typee" />
 
 
 </template>
@@ -19,8 +18,7 @@ export default {
             default:''
         },
         typee: {
-            type:String,
-            default:'text'
+            type:String
         },
         place:{
             type:String,
@@ -36,10 +34,9 @@ export default {
 
 <style lang="scss" scoped>
 
-.base-input{
-    color: var(--light);
+
     input,textarea{
-        color: var(--light);
+        color: var(--light) !important;
             background: transparent;
             border: none;
             box-shadow: none;
@@ -61,5 +58,4 @@ export default {
             }
 
         } 
-}
 </style>

@@ -156,7 +156,6 @@ export default {
   main{
 
     .signin-form{
-      width: 100%;
 
       .form-check-input{
         border: 2px solid var(--light);

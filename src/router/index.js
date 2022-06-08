@@ -12,18 +12,18 @@ const router = createRouter({
         },
         {
             path:'/contact',component:()=>import('../pages/Contact.vue')
-            // ,meta:{ requiresAuth : true}
+            ,meta:{ requiresAuth : true}
         },
         {
             path:'/signinup',component:()=>import('../pages/Signinup.vue')
         },
         {
             path:'/trading',component:()=>import('../pages/Trading.vue')
-            // ,meta:{ requiresAuth : true}
+            ,meta:{ requiresAuth : true}
         },
         {
             path:'/calculating',component:()=>import('../pages/Calculating.vue')
-            // ,meta:{ requiresAuth : true}
+            ,meta:{ requiresAuth : true}
         },
     ]
 });
